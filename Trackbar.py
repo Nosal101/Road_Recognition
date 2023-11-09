@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 
 
@@ -20,11 +21,15 @@ cv2.createTrackbar('Low V', 'image', 0, 255, nothing)
 cv2.createTrackbar('High V', 'image', 0, 255, nothing)
 
 # Wczytaj obraz
-image = cv2.imread("image_2/um_000018.png")
+index = 100
+files = os.listdir("image_2")
+files.sort()
+file = files[index]
+img = cv2.imread(os.path.join("image_2", file))
 
 while(1):
     # Konwertuj BGR do HSV
-    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
     # Odczytaj wartości suwaków
     low_h = cv2.getTrackbarPos('Low H', 'image')
@@ -42,7 +47,7 @@ while(1):
     mask = cv2.inRange(hsv, lower, upper)
 
     # Nałóż maskę na oryginalny obraz
-    res = cv2.bitwise_and(image, image, mask=mask)
+    res = cv2.bitwise_and(img, img, mask=mask)
 
     # Wyświetl obraz
     cv2.imshow('image', res)
