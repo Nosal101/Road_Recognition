@@ -21,7 +21,7 @@ cv2.createTrackbar('Low V', 'image', 0, 255, nothing)
 cv2.createTrackbar('High V', 'image', 0, 255, nothing)
 
 # Wczytaj obraz
-index = 100
+index = 35
 files = os.listdir("image_2")
 files.sort()
 file = files[index]
