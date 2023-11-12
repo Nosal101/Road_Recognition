@@ -12,6 +12,7 @@ def display_image(index):
     # Wczytaj zdjęcie z pliku
     file = files[index]
     img = cv2.imread(os.path.join("image_2", file))
+    img_to_show = cv2.imread(os.path.join("image_2", file))
     hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
     # Ustaw granice kolorów
     lower_green = np.array([40, 40, 40], dtype=np.uint8)
@@ -64,12 +65,22 @@ def display_image(index):
     gray_inverted[mask] = 0
     gray_inverted[mask2] = 0
     # Wyświetl obraz
-    plt.imshow(gray_inverted,cmap='gray')
+
+    # Zaznaczenie kontur
+    _, thresh = cv2.threshold(gray_inverted, 30, 255, cv2.THRESH_BINARY)
+    contours, _ = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    image_color = cv2.cvtColor(thresh, cv2.COLOR_GRAY2BGR)
+
+    for con in contours:
+        area = cv2.contourArea(con)
+        if area > 30000:
+            cv2.drawContours(img_to_show, [con], -1, (255, 0, 0), cv2.FILLED)
+
+    plt.imshow(img_to_show, cmap='gray')
     plt.show()
-
-
+    print(len(contours))
 
 index=0
 while True:
     display_image(index)
-    index+=5
+    index+=4
